@@ -21,20 +21,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.0' # Стабильная версия для Flet
-          channel: 'stable'
-
-      - name: Install dependencies
+      - name: Install Flet
         run: |
           pip install flet
 
       - name: Build APK
         run: |
-          # Соглашаемся с лицензиями Android и запускаем сборку
-          yes | flet build apk
+          # --no-docker критически важен для сборки прямо в GitHub Actions
+          # yes | автоматически нажмет "y" когда Flet спросит про установку Flutter
+          yes | flet build apk --no-docker
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
